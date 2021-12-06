@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('express-async-errors');
 const express = require('express');
 const authRoute = require('./routes/auth');
 const notFound = require('./middlewares/notFound');
