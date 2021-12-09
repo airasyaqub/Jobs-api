@@ -1,9 +1,19 @@
 require('dotenv').config();
 require('express-async-errors');
 const express = require('express');
+
+
+// routes
 const authRoute = require('./routes/auth');
+const jobRoute = require('./routes/job');
+
+
+// middlewares
 const notFound = require('./middlewares/notFound');
 const errorHandler = require('./middlewares/errorHandler');
+const authenticateUser = require('./middlewares/authenticate');
+
+
 const connectToDB = require('./db/main');
 
 
@@ -15,6 +25,7 @@ app.use(express.json());
 
 
 app.use('/auth', authRoute);
+app.use('/job', authenticateUser, jobRoute);
 
 
 app.use(notFound);

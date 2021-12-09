@@ -11,17 +11,16 @@ const loginUser = async (req, res) => {
 		password
 	} = req.body;
 
-
 	if (email && password) {
 		const user = await User.find({ email });
 		if (user && user.length) {
 			const userToLogin = user[0];
 			if (userToLogin.comparePassword(password)) {
 				const token = userToLogin.generateJWT()
-
 				const dataToSend = {
 					name: userToLogin.name,
 					email: userToLogin.email,
+					id: userToLogin._id,
 					token: token
 				}
 				return res.status(StatusCodes.OK).send({ status: 'success', data: dataToSend });
@@ -32,13 +31,12 @@ const loginUser = async (req, res) => {
 			invalidLogin();
 		}
 	} else {
-		throw createCustomError(`Please provide username/password !`, StatusCodes.BAD_REQUEST)
+		throw createCustomError(`Please provide email & password !`, StatusCodes.BAD_REQUEST);
 	}
 }
 
 
 const registerUser = async (req, res) => {
-
 	const {
 		name,
 		email,
@@ -61,12 +59,11 @@ const registerUser = async (req, res) => {
 	} else {
 		throw createCustomError(`Incomplete data: name, email, password is required`, StatusCodes.CONFLICT)
 	}
-
 }
 
 
 function invalidLogin() {
-	throw createCustomError(`Failed to login, The password or email that you have entered is incorrect.`, StatusCodes.BAD_REQUEST)
+	throw createCustomError(`Failed to login, The password or email that you have entered is incorrect.`, StatusCodes.UNAUTHORIZED)
 }
 
 

@@ -25,7 +25,7 @@ userSchema.methods.generateJWT = function () {
 
 	const userObj = {
 		name: this.name,
-		email: this.email
+		id: this._id
 	}
 
 	const token = jwt.sign(userObj, process.env.JWT_SECRET, {
