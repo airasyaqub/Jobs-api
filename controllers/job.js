@@ -66,17 +66,12 @@ const getJob = async (req, res) => {
 	} else {
 		res.status(StatusCodes.OK).send({ status: 'success', data: null});
 	}
-
 }
 
 const updateJob = async (req, res) => {
-
 	const userID = req.user.id;
-
 	const status = req.body.status;
-
 	if (status) {
-
 		let updatedJob = await Job.findOneAndUpdate({
 			createdBy: userID,
 			_id:  req.params.id
@@ -84,24 +79,19 @@ const updateJob = async (req, res) => {
 			new: true,
 			runValidators: true
 		});
-
 		if (!updatedJob) {
 			throw createCustomError(`No job found with given ID`, StatusCodes.NOT_FOUND);
 		}
-
 		res.status(StatusCodes.OK).send({ status: 'success', data: {
 			company: updatedJob.company,
 			position: updatedJob.position,
 			status: updatedJob.status,
 			id: updatedJob._id,
 		}});
-
 	} else {
 		throw createCustomError(`Provide status to update !`, StatusCodes.BAD_REQUEST);
 	}
 }
-
-
 
 const deleteJob = async (req, res) => {
 	const userID = req.user.id;
@@ -112,7 +102,6 @@ const deleteJob = async (req, res) => {
 	if (!job) {
 		throw createCustomError(`No job found with given id: ${req.params.id}`, StatusCodes.NOT_FOUND);
 	}
-
 	res.status(StatusCodes.OK).send({ status: 'success', message: `${req.params.id} job deleted` });
 }
 

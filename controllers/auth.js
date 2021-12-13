@@ -43,22 +43,35 @@ const registerUser = async (req, res) => {
 		password
 	} = req.body;
 
-	if (name && email && password) {
-		const user = await User.find({ email });
-		if (user && user.length) {
-			throw createCustomError(`${email} already registered`, StatusCodes.CONFLICT);
-		} else {
-			const createdUser = await User.create({
-				name,
-				email,
-				password
-			});
-			const token = createdUser.generateJWT();
-			res.status(StatusCodes.OK).send({ status: 'success', data: { ...req.body, token: token } });
-		}
-	} else {
-		throw createCustomError(`Incomplete data: name, email, password is required`, StatusCodes.CONFLICT)
-	}
+
+	const createdUser = await User.create({
+		name,
+		email,
+		password
+	});
+	const token = createdUser.generateJWT();
+	res.status(StatusCodes.OK).send({ status: 'success', data: { name, email, token: token } });
+
+
+	// if (name && email && password) {
+
+		// ==================> to check if email already exist, fixed with mongoose unique 
+
+		// const user = await User.find({ email });
+		// if (user && user.length) {
+		// 	throw createCustomError(`${email} already registered`, StatusCodes.CONFLICT);
+		// } else {
+	// 		const createdUser = await User.create({
+	// 			name,
+	// 			email,
+	// 			password
+	// 		});
+	// 		const token = createdUser.generateJWT();
+	// 		res.status(StatusCodes.OK).send({ status: 'success', data: { name, email, token: token } });
+	// 	// }
+	// } else {
+	// 	throw createCustomError(`Incomplete data: name, email, password is required`, StatusCodes.CONFLICT)
+	// }
 }
 
 
